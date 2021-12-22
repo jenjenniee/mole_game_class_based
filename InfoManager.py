@@ -57,7 +57,7 @@ class InformationManager():
         current_count_length = int(
             (self.left_margin + win_width_unit*2) / (self.hit_num_to_complete + 1e-5) * self.current_hit_num
         )
-        cv2.rectangle(
+        cv2.rectangle(                                                                               
             frame,
             pt1=outer_rectangle_start_point,  # 시작점 좌표(x, y)
             pt2=(current_count_length, win_height_unit*2), # 종료점 좌표(x, y)
@@ -74,22 +74,16 @@ class InformationManager():
             color=ColorCode.GREEN, 
             thickness=-1, # 선 두께, default=1
         )
-        
+        #그래프 안 카운트 넘버링    (y축 win_height_unit*2하면 숫자가 박스안으로 들어감)
+        cv2.putText(frame, str(int (self.current_hit_num)), (current_count_length, win_height_unit), cv2. FONT_HERSHEY_SCRIPT_SIMPLEX, 3, ColorCode.RED, 3) 
+
+        #오른쪽 페이지 상세정보 
         img_pil = Image.fromarray(frame)
         draw = ImageDraw.Draw(img_pil)
-        red = (0,0,255)
         font=ImageFont.truetype('fonts/nanum/NanumBarunGothic/NanumBarunGothicBold.ttf', 20)
-        draw.text( (self.left_margin + win_width_unit*2 + 20, 30), '현재 카운트 :'+ str(int (self.current_hit_num)), red, font)
-        frame = np.array(img_pil)
-
-        img_pil = Image.fromarray(frame)
-        draw = ImageDraw.Draw(img_pil)
-        draw.text( (self.left_margin + win_width_unit*2 + 20, 45), '목표 카운트 :'+ '10', red, font)
-        frame = np.array(img_pil)
-
-        img_pil = Image.fromarray(frame)
-        draw = ImageDraw.Draw(img_pil)
-        draw.text( (self.left_margin + win_width_unit*2 + 20, 60), '달성률 :'+ str(int(self.current_hit_num  / (self.hit_num_to_complete)*100)) + '%', red, font)
+        draw.text( (self.left_margin + win_width_unit*2 + 20, 30), '현재 카운트 :'+ str(int (self.current_hit_num)), ColorCode.RED, font)
+        draw.text( (self.left_margin + win_width_unit*2 + 20, 45), '목표 카운트 :'+ '10', ColorCode.RED, font)
+        draw.text( (self.left_margin + win_width_unit*2 + 20, 60), '달성률 :'+ str(int(self.current_hit_num  / (self.hit_num_to_complete)*100)) + '%', ColorCode.RED, font)
         frame = np.array(img_pil)
 
         # img_pil = Image.fromarray(frame)
