@@ -3,6 +3,7 @@ import numpy as np
 import mediapipe as mp
 import math 
 
+from PIL import ImageFont, ImageDraw, Image
 from utils.angle_calculaters import calculate_angle
 
 mpDraw= mp.solutions.drawing_utils  #미디어 파이프 초록색 선 그리기
@@ -107,15 +108,20 @@ def measure_arm_distance(frame, win_name, success_crit=30):
             angle:dict, (left angle, right angle) 팔 각도
     '''
     
-    cv2.putText(
-        frame,
-        str("Bend your left and right arm: less than 30 degree"),
-        (10,20),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.5,
-        (0,0,255),
-        2,
-    )
+    # cv2.putText(
+    #     frame,
+    #     str("Bend your left and right arm: less than 30 degree"),
+    #     (10,20),
+    #     cv2.FONT_HERSHEY_SIMPLEX,
+    #     0.5,
+    #     (0,0,255),
+    #     2,
+    # )
+    
+    img_pil = Image.fromarray(frame)
+    draw = ImageDraw.Draw(img_pil)
+    draw.text( (10,20), "양 팔을 30도 미만으로 구부려주세요", font=ImageFont.truetype('fonts/nanum/NanumBarunGothic/NanumBarunGothicBold.ttf',20), fill=(0,0,255))
+    frame = np.array(img_pil)
     
     # l1, l2 거리 계산을 위한 관절 좌표 추출
     results = pose.process(frame)   
@@ -225,26 +231,36 @@ def measure_arm_distance(frame, win_name, success_crit=30):
         }
 
         # Display angles
-        cv2.putText(
-            frame,
-            'Left arm angle:' + str(int(angle['left'])) + '   Dist: {0:2.1f}'.format(distance['left']),
-            (10, 40),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (0, 0, 255),
-            2,
-        )
+        # cv2.putText(
+        #     frame,
+        #     'Left arm angle:' + str(int(angle['left'])) + '   Dist: {0:2.1f}'.format(distance['left']),
+        #     (10, 40),
+        #     cv2.FONT_HERSHEY_SIMPLEX,
+        #     0.5,
+        #     (0, 0, 255),
+        #     2,
+        # )
+        img_pil = Image.fromarray(frame)
+        draw = ImageDraw.Draw(img_pil)
+        draw.text( (10,40), '왼쪽 팔 각도:' + str(int(angle['left'])) + '   Dist: {0:2.1f}'.format(distance['left']),
+        font=ImageFont.truetype('fonts/nanum/NanumBarunGothic/NanumBarunGothicBold.ttf',20), fill=(0,0,255))
+        frame = np.array(img_pil)
 
-        cv2.putText(
-            frame,
-            'Right arm angle:' + str(int(angle['right'])) + '   Dist: {0:2.1f}'.format(distance['right']),
-            (10, 60),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (0, 0, 255),
-            2,
-        )
-        
+
+        # cv2.putText(
+        #     frame,
+        #     'Right arm angle:' + str(int(angle['right'])) + '   Dist: {0:2.1f}'.format(distance['right']),
+        #     (10, 60),
+        #     cv2.FONT_HERSHEY_SIMPLEX,
+        #     0.5,
+        #     (0, 0, 255),
+        #     2,
+        # )
+        img_pil = Image.fromarray(frame)
+        draw = ImageDraw.Draw(img_pil)
+        draw.text( (10,60), '오른 팔 각도:' + str(int(angle['right'])) + '   Dist: {0:2.1f}'.format(distance['right']),
+        font=ImageFont.truetype('fonts/nanum/NanumBarunGothic/NanumBarunGothicBold.ttf',20), fill=(0,0,255))
+        frame = np.array(img_pil)
         cv2.imshow(win_name, frame)
 
     except:

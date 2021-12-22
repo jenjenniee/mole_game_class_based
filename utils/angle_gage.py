@@ -1,8 +1,10 @@
 import cv2
+from utils.Colors import ColorCode
 
-# 팔각도 목표 달성값 Plotting
 def angleGage(angle, outWidth, frame):
-        
+
+
+    # 팔각도 목표 달성값 Plotting
     # 왼쪽 팔각도 게이지 그래프 출력
     # 팔의 최대 각도 160도 최소 각도 60도로 설정
     # 측정된 팔의 각도에서 최소각도를 양변에 빼주고 
@@ -24,10 +26,10 @@ def angleGage(angle, outWidth, frame):
     
     cv2.rectangle(
         frame, 
-        pt1=(outWidth-30, 100), # 시작점 좌표(x, y)
-        pt2=(outWidth,600),     # 종료점 좌표(x, y)
-        color=(0,0,255),        # 색상 -> red
-        thickness=3,            # 선 두께, default=1
+        pt1=(outWidth-30, 100),  # 시작점 좌표(x, y)
+        pt2=(outWidth,600), # 종료점 좌표(x, y)
+        color=ColorCode.RED, 
+        thickness=3, # 선 두께, default=1
     )
     
     cv2.rectangle(

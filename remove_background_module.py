@@ -4,22 +4,13 @@ import numpy as np
 
 mp_drawing = mp.solutions.drawing_utils
 mp_selfie_segmentation = mp.solutions.selfie_segmentation
-
-# For webcam input:
 BG_COLOR = (192, 192, 192) # gray
-cap = cv2.VideoCapture(0)
 
-with mp_selfie_segmentation.SelfieSegmentation(
-    model_selection=1) as selfie_segmentation:
-  
-  bg_image = None
-  
-  while cap.isOpened():
-    success, image = cap.read()
-    if not success:
-      print("Ignoring empty camera frame.")
-      # If loading a video, use 'break' instead of 'continue'.
-      continue
+def remove_background(image):
+  with mp_selfie_segmentation.SelfieSegmentation(
+      model_selection=1) as selfie_segmentation:
+    
+    bg_image = None
 
     # Flip the image horizontally for a later selfie-view display, and convert
     # the BGR image to RGB.
@@ -47,8 +38,5 @@ with mp_selfie_segmentation.SelfieSegmentation(
       bg_image[:] = BG_COLOR
     
     output_image = np.where(condition, image, bg_image)
-
-    cv2.imshow('MediaPipe Selfie Segmentation', output_image)
-    if cv2.waitKey(5) & 0xFF == 27:
-      break
-cap.release()
+    return output_image
+  return None
