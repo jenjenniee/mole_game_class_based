@@ -12,11 +12,17 @@ class InformationManager():
         self.hit_num_to_complete = goal_to_complete
         self.current_hit_num = 0
         self.pane_move_num = 0
+        self.pane_stack = []
         self.left_margin = 5
         self.right_margin = 5
         self.text_line_space = 10
         self.bg_img = cv2.imread('./imgs/bg_white.png', cv2.IMREAD_COLOR)
-        
+        self.current_pane_id = 0
+       
+    #두더지 pane movements update
+    def append_pane_stack(self,current_pane_id):
+        self.pane_stack.append(current_pane_id)
+
     def increase_hit_number(self,):
         self.current_hit_num += 1
 
@@ -28,19 +34,21 @@ class InformationManager():
             return True
         else:
             return False
-        
+    
     def reset_game(self,):
         self.current_hit_num = 0
         self.pane_move_num = 0
-    
+        self.current_pane_id = 0
+       
     def display_game_info(self, window_size_height, window_size_width):
+
         print(window_size_height)
         frame = cv2.resize(self.bg_img, (window_size_width, window_size_height), cv2.INTER_CUBIC)
         
         # 화면을 2:1 비율로 분할
         win_width_unit = int(window_size_width/4)
         win_height_unit = int(window_size_height/3)
-        
+    
                 
         # 운동량 바깥 사각형 -> 오른쪽 2칸 unit 중앙에 현재/목표수 gage 출력
         outer_rectangle_start_point = (self.left_margin, win_height_unit)
@@ -71,33 +79,21 @@ class InformationManager():
             frame,
             pt1=(self.left_margin + win_width_unit*2 + 10, 10),  # 시작점 좌표(x, y)
             pt2=(window_size_width-10, window_size_height-10), # 종료점 좌표(x, y)
-            color=ColorCode.GREEN, 
+            color=ColorCode.BABY_PURPLE, 
             thickness=-1, # 선 두께, default=1
         )
-        #그래프 안 카운트 넘버링    (y축 win_height_unit*2하면 숫자가 박스안으로 들어감)
-        cv2.putText(frame, str(int (self.current_hit_num)), (current_count_length, win_height_unit), cv2. FONT_HERSHEY_SCRIPT_SIMPLEX, 3, ColorCode.RED, 3) 
-
+        #그래프 안 카운트 넘버링    (y축 win_height_unit*2하면 숫자가 박스안으로 들어감) (-10 = 상단 표시)
+        cv2.putText(frame, str(int (self.current_hit_num)), (current_count_length, win_height_unit+55), cv2. FONT_HERSHEY_SCRIPT_SIMPLEX, 2, ColorCode.RED, 3) 
+          
         #오른쪽 페이지 상세정보 
         img_pil = Image.fromarray(frame)
         draw = ImageDraw.Draw(img_pil)
-        font=ImageFont.truetype('fonts/nanum/NanumBarunGothic/NanumBarunGothicBold.ttf', 20)
-        draw.text( (self.left_margin + win_width_unit*2 + 20, 30), '현재 카운트 :'+ str(int (self.current_hit_num)), ColorCode.RED, font)
-        draw.text( (self.left_margin + win_width_unit*2 + 20, 45), '목표 카운트 :'+ '10', ColorCode.RED, font)
-        draw.text( (self.left_margin + win_width_unit*2 + 20, 60), '달성률 :'+ str(int(self.current_hit_num  / (self.hit_num_to_complete)*100)) + '%', ColorCode.RED, font)
+        font=ImageFont.truetype('fonts/nanum/NanumBarunGothic/NanumBarunGothicBold.ttf', 30)
+        draw.text( (self.left_margin + win_width_unit*2 + 20, 30), '현재 카운트 :'+ str(int (self.current_hit_num)), ColorCode.BLACK, font)
+        draw.text( (self.left_margin + win_width_unit*2 + 20, 60), '목표 카운트 :'+ '10', ColorCode.BLACK, font)
+        draw.text( (self.left_margin + win_width_unit*2 + 20, 90), '달성률 :'+ str(int(self.current_hit_num  / (self.hit_num_to_complete)*100)) + '%', ColorCode.BLACK, font)
+        draw.text( (self.left_margin + win_width_unit*2 + 20, 120), 'pane 이동 횟수 :'+ str(int(len(self.pane_stack))) , ColorCode.BLACK, font)
         frame = np.array(img_pil)
-
-        # img_pil = Image.fromarray(frame)
-        # draw = ImageDraw.Draw(img_pil)
-        # draw.text(
-        #     xy=(
-        #         self.left_margin + win_width_unit*2 + self.text_line_space*5 -2, 
-        #         self.text_line_space * 5 - 2
-        #     ), 
-        #     text=str(int(self.current_hit_num / (self.hit_num_to_complete * 100 + 1e-5))) + r'%', 
-        #     font=ImageFont.truetype('fonts/nanum/NanumBarunGothic/NanumBarunGothicBold.ttf', 10), 
-        #     fill=(0,0,255)
-        # )
-        # frame = np.array(img_pil)
         
         return frame
         

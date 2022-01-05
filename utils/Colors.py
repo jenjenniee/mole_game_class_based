@@ -1,8 +1,11 @@
 class ColorCode():
+    WHITE = (246, 246, 246)
+    BLACK = (0, 0, 0)
     RED = (0, 0, 255)
     GREEN = (0, 255, 0)
     BLUE = (255, 0, 0)
     YELLOW = (0, 255, 255)
+    BABY_PURPLE = (255, 217, 218)
     GRID_COLOR = (153, 153, 0)
     SHOULDER_MARKER = (255, 255, 0)
     WRIST_MARKER = (153, 0, 0)

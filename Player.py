@@ -25,6 +25,7 @@ from remove_background_module import remove_background
 mpPose = mp.solutions.pose
 pose = mp.solutions.pose.Pose()
 
+
 class Player():
     def __init__(self, divide_units=3, arm_position='right', selfie_mode=False, goal_count_to_clear=10):
         self.divide_unit = divide_units
@@ -47,6 +48,7 @@ class Player():
         self.SELFIE_MODE = selfie_mode
         self.MISSION_COMPLETE = False
         self.GOAL_COUNT_TO_CLEAR = goal_count_to_clear
+     
         
         # 좌/우 팔 선택에 따라 해당 좌표 정보를 할당
         self.arm_position = arm_position
@@ -62,8 +64,7 @@ class Player():
             print(f'You selected arm position: {self.arm_position}')
             print("arm_position must be either 'right' or 'left'")
         
-        super().__init__()  
-        
+        super().__init__()         
     
     def calculate_frame_relative_coordinate(self, frame, results, idx):
         """cv.image.shape에서 리턴하는 상대적 좌표를 입력으로 주어진
@@ -173,16 +174,17 @@ class Player():
         )
 
         return frame
-    
 
-    def play_game(self,):
+    def play_game(self):
         MOVE_TO_NEW_LOCATION = True
         win_manager = WindowManager()
         win_manager.get_screenInfo()
         win_manager.display_monitorInfo()
         win_manager.create_windows()
         self.player_win_name = win_manager.window_names['Player']
-        
+        pane_stack = []
+
+
         bg_window_size = (
             win_manager.windows_info['Mole']['height'],
             win_manager.windows_info['Mole']['width'],
@@ -210,10 +212,11 @@ class Player():
             self.divide_unit
         )
 
-        
         # Camera open and keep track cam image
         cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
         
+        last_pane_id = 0
+
         while cv2.waitKey(33) < 0:
             _ , frame = cap.read()
             
@@ -290,10 +293,16 @@ class Player():
                     self.IS_FIRST = False
                 
                 if self.current_pane_id != None:
+                    
                     # 두더지가 현재 pane에서 머물러 있는 시간을 체크하고,
                     # 일정 시간 (Criteria.SUCCESS_ARM_ANGLE_TO_HIT_MOLE) 이상 지난 경우
                     # pane ID를 랜덤하게 추출하여 두더지 위치 변경
+                    if last_pane_id != self.current_pane_id:
+                        info_manager.append_pane_stack(self.current_pane_id)
+
+
                     if self.current_pane_id == self.target_pane_id:
+                        
                         pane_stay_time = pane_timer.update(self.target_pane_id)
                     else:
                         pane_stay_time = 0.0
@@ -318,6 +327,7 @@ class Player():
                             self.current_pane_id, self.target_pane_id, pane_stay_time, self.mole_hit_success,
                         ), 
                     )
+                    
                     
                     if MOVE_TO_NEW_LOCATION: 
                         while True:
@@ -345,6 +355,8 @@ class Player():
                     )
                     mole_img = mole_manager.draw_grids_on_mole_window(mole_img)
                     mole_img = cv2.flip(mole_img, 1)
+                    last_pane_id = self.current_pane_id
+
                     cv2.imshow(win_manager.window_names['Mole'], mole_img)
 
                 
@@ -367,8 +379,7 @@ class Player():
                 
                 frame_info = info_manager.display_game_info(
                     window_size_height=info_window_size[0],
-                    window_size_width=info_window_size[1]
-                    
+                    window_size_width=info_window_size[1],
                 )
                 cv2.imshow(win_manager.window_names['Information'], frame_info)
             
