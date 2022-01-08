@@ -27,6 +27,7 @@ pose = mp.solutions.pose.Pose()
 
 
 class Player():
+    #초기 게임 설정 
     def __init__(self, divide_units=3, arm_position='right', selfie_mode=False, goal_count_to_clear=10):
         self.divide_unit = divide_units
         self.max_angle = 160
@@ -69,12 +70,10 @@ class Player():
     def calculate_frame_relative_coordinate(self, frame, results, idx):
         """cv.image.shape에서 리턴하는 상대적 좌표를 입력으로 주어진
         frame 이미지에 적용하여 이미지상에 적용할 수 있는 좌표를 리턴합니다.
-
         Args:
             frame (numpy array): img (cv2 object), in case we use fram from webcam
             results (mediapipe pose object): object after processing 'mediapipe의 pose.process(frame)'
             idx (int): the target landmark index in result object
-
         Returns:
             loc_x, loc_y (tuple): relative location of frame
         """     

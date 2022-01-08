@@ -1,4 +1,3 @@
-
 from time import sleep
 import cv2
 
@@ -69,6 +68,3 @@ if __name__=='__main__':
     # frame = mole_manager.generate_grid_on_moleWindow()
     
     print('Bye, end of computation ^^')
-    
-    
-    

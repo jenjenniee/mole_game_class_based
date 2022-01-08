@@ -19,7 +19,6 @@ class InformationManager():
         self.bg_img = cv2.imread('./imgs/bg_white.png', cv2.IMREAD_COLOR)
         self.current_pane_id = 0
        
-    #두더지 pane movements update
     def append_pane_stack(self,current_pane_id):
         self.pane_stack.append(current_pane_id)
 
@@ -39,6 +38,7 @@ class InformationManager():
         self.current_hit_num = 0
         self.pane_move_num = 0
         self.current_pane_id = 0
+        self.pane_stack = []
        
     def display_game_info(self, window_size_height, window_size_width):
 
@@ -90,7 +90,7 @@ class InformationManager():
         draw = ImageDraw.Draw(img_pil)
         font=ImageFont.truetype('fonts/nanum/NanumBarunGothic/NanumBarunGothicBold.ttf', 30)
         draw.text( (self.left_margin + win_width_unit*2 + 20, 30), '현재 카운트 :'+ str(int (self.current_hit_num)), ColorCode.BLACK, font)
-        draw.text( (self.left_margin + win_width_unit*2 + 20, 60), '목표 카운트 :'+ '10', ColorCode.BLACK, font)
+        draw.text( (self.left_margin + win_width_unit*2 + 20, 60), '목표 카운트 :'+ str(int(self.hit_num_to_complete)), ColorCode.BLACK, font)
         draw.text( (self.left_margin + win_width_unit*2 + 20, 90), '달성률 :'+ str(int(self.current_hit_num  / (self.hit_num_to_complete)*100)) + '%', ColorCode.BLACK, font)
         draw.text( (self.left_margin + win_width_unit*2 + 20, 120), 'pane 이동 횟수 :'+ str(int(len(self.pane_stack))) , ColorCode.BLACK, font)
         frame = np.array(img_pil)
