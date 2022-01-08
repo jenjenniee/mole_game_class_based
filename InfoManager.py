@@ -85,7 +85,7 @@ class InformationManager():
         #그래프 안 카운트 넘버링    (y축 win_height_unit*2하면 숫자가 박스안으로 들어감) (-10 = 상단 표시)
         cv2.putText(frame, str(int (self.current_hit_num)), (current_count_length, win_height_unit+55), cv2. FONT_HERSHEY_SCRIPT_SIMPLEX, 2, ColorCode.RED, 3) 
           
-        #오른쪽 페이지 상세정보 
+        #오른쪽 페이지 상세정보 출력
         img_pil = Image.fromarray(frame)
         draw = ImageDraw.Draw(img_pil)
         font=ImageFont.truetype('fonts/nanum/NanumBarunGothic/NanumBarunGothicBold.ttf', 30)
