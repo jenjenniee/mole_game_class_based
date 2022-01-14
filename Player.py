@@ -25,16 +25,17 @@ from remove_background_module import remove_background
 mpPose = mp.solutions.pose
 pose = mp.solutions.pose.Pose()
 
-
-class Player():
-    #초기 게임 설정 
-    def __init__(self, divide_units=3, arm_position='right', selfie_mode=False, goal_count_to_clear=10):
+#초기 게임 설정
+class Player(): 
+    def __init__(self, divide_units=3, arm_position='left', selfie_mode=False, goal_count_to_clear=15):
         self.divide_unit = divide_units
         self.max_angle = 160
         self.min_angle = 30
         self.num_count_left = 0
         self.num_count_right = 0
         self.shrinked_left = True
+
+
         self.shrinked_right = True
         self.success = False
         self.distance = None # will be stored with tuple (left, right distance info)
