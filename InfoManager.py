@@ -74,7 +74,7 @@ class InformationManager():
             thickness=-1, # 선 두께, default=1, -1일 경우 가득 채우기
         )
         
-        # 왼쪽 1칸에 목표 hit, 현재 hit, pane 이동 수 출력
+        # 왼쪽 1 칸에 목표 hit, 현재 hit, pane 이동 수 출력
         cv2.rectangle(
             frame,
             pt1=(self.left_margin + win_width_unit*2 + 10, 10),  # 시작점 좌표(x, y)
