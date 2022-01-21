@@ -13,6 +13,7 @@ class MoleManager():
         self.mole_list = None
         self.mole_img = cv2.imread('./imgs/mole_jklee.jpg', cv2.IMREAD_COLOR)
         self.start_img = cv2.imread('./imgs/start_bg.png', cv2.IMREAD_COLOR)
+        self.start_set_img = cv2.imread('./imgs/start_set.png', cv2.IMREAD_COLOR)
         self.mission_completed_img = cv2.imread('./imgs/bg_mission_completed.png', cv2.IMREAD_COLOR)
         self.show_up_time = 1
         self.bg_screen_size = bg_screen_size

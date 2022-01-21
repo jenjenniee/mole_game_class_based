@@ -18,7 +18,10 @@ class InformationManager():
         self.text_line_space = 10
         self.bg_img = cv2.imread('./imgs/bg_white.png', cv2.IMREAD_COLOR)
         self.current_pane_id = 0
-       
+        self.count_set = 1
+        #self.set_num_to_complete = self.count_set
+     
+
     def append_pane_stack(self,current_pane_id):
         self.pane_stack.append(current_pane_id)
 
@@ -27,18 +30,30 @@ class InformationManager():
 
     def increase_pane_movement(self,):
         self.pane_move_num += 1
+
+    def increase_set(self,):
+        self.count_set += 1
     
     def check_mission_complete(self,):
         if self.current_hit_num >= self.hit_num_to_complete:
             return True
         else:
             return False
-    
+
+    def check_set_complete(self,):    
+         if self.count_set == self.set_num_to_complete:
+            return True
+         else:
+            return False
+
     def reset_game(self,):
         self.current_hit_num = 0
         self.pane_move_num = 0
         self.current_pane_id = 0
         self.pane_stack = []
+
+        
+        
        
     def display_game_info(self, window_size_height, window_size_width):
 
@@ -93,6 +108,7 @@ class InformationManager():
         draw.text( (self.left_margin + win_width_unit*2 + 20, 60), '목표 카운트 :'+ str(int(self.hit_num_to_complete)), ColorCode.BLACK, font)
         draw.text( (self.left_margin + win_width_unit*2 + 20, 90), '달성률 :'+ str(int(self.current_hit_num  / (self.hit_num_to_complete)*100)) + '%', ColorCode.BLACK, font)
         draw.text( (self.left_margin + win_width_unit*2 + 20, 120), 'pane 이동 횟수 :'+ str(int(len(self.pane_stack))) , ColorCode.BLACK, font)
+        draw.text( (self.left_margin + win_width_unit*2 + 20, 150), '현재 set :'+ str(int(self.count_set)) , ColorCode.BLACK, font)
         frame = np.array(img_pil)
         
         return frame

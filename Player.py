@@ -19,15 +19,15 @@ from utils.get_player_grid_unit_id import get_grid_unit_id
 from utils.get_mole_unit_locations import get_grid_locations, get_grid_unit_distace
 from utils.mole_show_up import mole_show_up
 from utils.remove_background import remove_bg_mediapipe_selfie
-
 from remove_background_module import remove_background
+from PIL import ImageFont, ImageDraw, Image
 
 mpPose = mp.solutions.pose
 pose = mp.solutions.pose.Pose()
 
 #초기 게임 설정
 class Player(): 
-    def __init__(self, divide_units=3, arm_position='left', selfie_mode=False, goal_count_to_clear=15):
+    def __init__(self, divide_units=3, arm_position='right', selfie_mode=False, goal_count_to_clear=3, set_count_to_clear=2 ):
         self.divide_unit = divide_units
         self.max_angle = 160
         self.min_angle = 30
@@ -50,6 +50,10 @@ class Player():
         self.SELFIE_MODE = selfie_mode
         self.MISSION_COMPLETE = False
         self.GOAL_COUNT_TO_CLEAR = goal_count_to_clear
+        self.SET_COUNT_TO_CLEAR = set_count_to_clear
+    
+        
+     
      
         
         # 좌/우 팔 선택에 따라 해당 좌표 정보를 할당
@@ -175,7 +179,7 @@ class Player():
 
         return frame
 
-    def play_game(self):
+    def play_game(self,):
         MOVE_TO_NEW_LOCATION = True
         win_manager = WindowManager()
         win_manager.get_screenInfo()
@@ -198,6 +202,7 @@ class Player():
         mole_manager = MoleManager(bg_window_size, divide_unit=self.divide_unit)
         pane_timer = Timer()
         info_manager = InformationManager(self.GOAL_COUNT_TO_CLEAR)
+        
         
         # Processing Mole window
         frame_mole_window = mole_manager.create_background_image(win_manager)
@@ -224,8 +229,10 @@ class Player():
             if not self.success:
                 # 미션을 완성하고 다시 반복되는 경우는 다른 이미지 출력
                 if self.MISSION_COMPLETE: 
-                    cv2.imshow(win_manager.window_names['Mole'], mole_manager.mission_completed_img)
+                    cv2.imshow(win_manager.window_names['Mole'], mole_manager.start_set_img)
+                    cv2.putText(mole_manager.start_set_img, str(int(info_manager.count_set)), (250, 500), cv2.FONT_HERSHEY_SIMPLEX, 20, (255, 0,0),3)              #세트 수 표시
                 
+                 
                 # mole grid window에 초기 화면 뿌리기
                 else:  
                     cv2.imshow(win_manager.window_names['Mole'], mole_manager.start_img)
@@ -319,6 +326,8 @@ class Player():
                         self.MISSION_COMPLETE = info_manager.check_mission_complete()
                         if self.MISSION_COMPLETE:
                             info_manager.reset_game()
+                            info_manager.increase_set()                                                 #세트
+                                                                                   
                             self.success = False
                     else:
                         MOVE_TO_NEW_LOCATION = False
