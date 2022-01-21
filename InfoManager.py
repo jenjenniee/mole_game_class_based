@@ -8,8 +8,9 @@ class InformationManager():
     '''
     Display information about mole game
     '''
-    def __init__(self, goal_to_complete):
+    def __init__(self, goal_to_complete, set_num_to_complete):
         self.hit_num_to_complete = goal_to_complete
+        self.set_num_to_complete = set_num_to_complete
         self.current_hit_num = 0
         self.pane_move_num = 0
         self.pane_stack = []
@@ -19,7 +20,6 @@ class InformationManager():
         self.bg_img = cv2.imread('./imgs/bg_white.png', cv2.IMREAD_COLOR)
         self.current_pane_id = 0
         self.count_set = 1
-        #self.set_num_to_complete = self.count_set
      
 
     def append_pane_stack(self,current_pane_id):
@@ -35,15 +35,9 @@ class InformationManager():
         self.count_set += 1
     
     def check_mission_complete(self,):
-        if self.current_hit_num >= self.hit_num_to_complete:
+        if self.current_hit_num >= self.hit_num_to_complete or self.count_set > self.set_num_to_complete:
             return True
         else:
-            return False
-
-    def check_set_complete(self,):    
-         if self.count_set == self.set_num_to_complete:
-            return True
-         else:
             return False
 
     def reset_game(self,):

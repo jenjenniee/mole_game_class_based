@@ -201,7 +201,7 @@ class Player():
         
         mole_manager = MoleManager(bg_window_size, divide_unit=self.divide_unit)
         pane_timer = Timer()
-        info_manager = InformationManager(self.GOAL_COUNT_TO_CLEAR)
+        info_manager = InformationManager(self.GOAL_COUNT_TO_CLEAR, self.SET_COUNT_TO_CLEAR)
         
         
         # Processing Mole window
@@ -229,9 +229,17 @@ class Player():
             if not self.success:
                 # 미션을 완성하고 다시 반복되는 경우는 다른 이미지 출력
                 if self.MISSION_COMPLETE: 
-                    cv2.imshow(win_manager.window_names['Mole'], mole_manager.start_set_img)
-                    cv2.putText(mole_manager.start_set_img, str(int(info_manager.count_set)), (250, 500), cv2.FONT_HERSHEY_SIMPLEX, 20, (255, 0,0),3)              #세트 수 표시
-                
+                    copy_img = mole_manager.start_set_img.copy()
+                    cv2.putText(copy_img, str(int(info_manager.count_set)-1), (250, 500), cv2.FONT_HERSHEY_SIMPLEX, 20, (255, 0,0),3)              #세트 수 표시
+                    cv2.imshow(win_manager.window_names['Mole'], copy_img)
+                    # cv2.putText(mole_manager.start_set_img, str(int(info_manager.count_set)), (250, 500), cv2.FONT_HERSHEY_SIMPLEX, 20, (255, 0,0),3)              #세트 수 표시
+
+                    # img_pil = Image.fromarray(frame)
+                    # draw = ImageDraw.Draw(img_pil)
+                    # font=ImageFont.truetype('fonts/nanum/NanumBarunGothic/NanumBarunGothicBold.ttf', 30)
+                    # draw.text((self.left_margin + self.win_width_unit*2 + 20, 60), "dfsdfdf"+ str(int(info_manager.count_set)), ColorCode.BLUE, font)
+                    
+                            
                  
                 # mole grid window에 초기 화면 뿌리기
                 else:  
