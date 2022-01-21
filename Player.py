@@ -53,6 +53,7 @@ class Player():
         self.SET_COUNT_TO_CLEAR = set_count_to_clear
     
         
+        self.end_img = cv2.imread('./imgs/game_end.png', cv2.IMREAD_COLOR)
      
      
         
@@ -334,8 +335,13 @@ class Player():
                         self.MISSION_COMPLETE = info_manager.check_mission_complete()
                         if self.MISSION_COMPLETE:
                             info_manager.reset_game()
-                            info_manager.increase_set()                                                 #세트
-                                                                                   
+                            info_manager.increase_set()
+
+                            if info_manager.end_set():
+                                cv2.imshow(win_manager.window_names['Mole'], self.end_img)
+                                cv2.waitKey(1000)
+                                break
+                                                                                                                    
                             self.success = False
                     else:
                         MOVE_TO_NEW_LOCATION = False

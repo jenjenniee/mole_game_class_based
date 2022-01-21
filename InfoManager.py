@@ -1,6 +1,7 @@
+from tkinter import Frame
 import cv2
 import numpy as np
-
+from WindowManager import WindowManager 
 from PIL import ImageFont, ImageDraw, Image
 from utils.Colors import ColorCode
 
@@ -18,6 +19,7 @@ class InformationManager():
         self.right_margin = 5
         self.text_line_space = 10
         self.bg_img = cv2.imread('./imgs/bg_white.png', cv2.IMREAD_COLOR)
+        self.end_img = cv2.imread('./imgs/game_end.png', cv2.IMREAD_COLOR)
         self.current_pane_id = 0
         self.count_set = 1
      
@@ -35,7 +37,7 @@ class InformationManager():
         self.count_set += 1
     
     def check_mission_complete(self,):
-        if self.current_hit_num >= self.hit_num_to_complete or self.count_set > self.set_num_to_complete:
+        if self.current_hit_num >= self.hit_num_to_complete: #or self.count_set > self.set_num_to_complete:
             return True
         else:
             return False
@@ -45,6 +47,13 @@ class InformationManager():
         self.pane_move_num = 0
         self.current_pane_id = 0
         self.pane_stack = []
+
+    def end_set(self,):
+        if self.count_set > self.set_num_to_complete:
+            return True
+        else:
+            return False
+
 
         
         
