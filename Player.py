@@ -340,8 +340,7 @@ class Player():
                             if info_manager.end_set():
                                 cv2.imshow(win_manager.window_names['Mole'], self.end_img)
                                 cv2.waitKey(1000)
-                                #break 시 set 끝나면 게임 꺼짐
-                                #break
+                                #break          ----->break 시 set 끝나면 게임 꺼짐
                                                                                                                     
                             self.success = False
                     else:
