@@ -3,7 +3,6 @@ from random import randint
 import mediapipe as mp
 import numpy as np
 
-
 from time import sleep
 from InfoManager import InformationManager
 from WindowManager import WindowManager 
